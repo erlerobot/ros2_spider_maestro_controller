@@ -12,6 +12,7 @@
 #include "PolstroSerialInterface.h"
 
 #define N_CHANNELS 18
+RMW_IMPORT rclcpp::Node::SharedPtr create_node();
 
 class Controller {
 	public:
@@ -20,8 +21,8 @@ class Controller {
 	private:
 		//CREATE NODE
 		//ros::NodeHandle node;
-		rclcpp::Node node;
-
+		rclcpp::Node::SharedPtr node;
+		
 		std::string port_name;
 		Polstro::SerialInterface* maestro;
 		double joint_lower_limit, joint_upper_limit, limit_coef;
@@ -34,7 +35,7 @@ class Controller {
 		//ros::Subscriber sub;
 		rclcpp::subscription::SubscriptionBase::SharedPtr sub;
 		//void chatterLegsState (const spider_msgs::LegsJointsStateConstPtr &legs_jnts);
-		void chatterLegsState (const spider_msgs::msg::LegsJointsState::ConstPtr &legs_jnts);
+		void chatterLegsState (const spider_msgs::msg::LegsJointsState::SharedPtr legs_jnts);
 };
 
 #endif /* CONTROLLER_SUB_HPP_ */

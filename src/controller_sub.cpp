@@ -1,4 +1,5 @@
 #include "controller_sub.hpp"
+#include <spider_msgs/msg/legs_joints_state.hpp>
 
 	const int rotation_direction[18] = 	{1,-1, 1,
 								 	 	 1,-1, 1,
@@ -9,10 +10,9 @@
 
 
 Controller::Controller(){
-
   // Get Min and Max joints limits
-	node.param("joint_lower_limit", joint_lower_limit, -1.570796327);
-	node.param("joint_upper_limit", joint_upper_limit, 1.570796327);
+//	node.param("joint_lower_limit", joint_lower_limit, -1.570796327);
+/*	node.param("joint_upper_limit", joint_upper_limit, 1.570796327);
 	limit_coef = 127 / ((joint_upper_limit - joint_lower_limit) / 2);
 
 	// Get the interface to connect Erle-Brain with Mini-Maestro
@@ -46,17 +46,18 @@ Controller::Controller(){
 	//LEG 6
 	node.param("leg6_1", channels[15], 15);
 	node.param("leg6_2", channels[16], 16);
-	node.param("leg6_3", channels[17], 17);
+	node.param("leg6_3", channels[17], 17);*/
 
-	maestro = Polstro::SerialInterface::createSerialInterface(port_name, 115200);
-	auto sub = node->create_subscription("joints_to_controller", 1, &Controller::chatterLegsState, this);
+	//maestro = Polstro::SerialInterface::createSerialInterface(port_name, 115200);
+    auto sub = node->create_subscription<spider_msgs::msg::LegsJointsState>(
+    	"joints_to_controller", rmw_qos_profile_default, Controller::chatterLegsState);
 	//ROS_INFO("Maestro servo controller is ready...");
 	std::cout << "Maestro servo controller is ready..." << std::endl;
 }
 //see how to call msg http://po-jen.github.io/design/articles/migration_guide_from_ros1.html
 
 //void Controller::chatterLegsState (const spider_msgs::LegsJointsStateConstPtr &legs_jnts){
-void Controller::chatterLegsState (const spider_msgs::msg::LegsJointsState::ConstPtr &legs_jnts){
+void Controller::chatterLegsState(const spider_msgs::msg::LegsJointsState::SharedPtr legs_jnts){
 	float target_value;
 	int s_num;
 
@@ -68,7 +69,7 @@ void Controller::chatterLegsState (const spider_msgs::msg::LegsJointsState::Cons
 
 			maestro->setTargetMSS(channels[s_num], (unsigned char) target_value);
 		}
-	}
+	} 
 }
 
 int main(int argc, char **argv)
@@ -82,6 +83,8 @@ int main(int argc, char **argv)
 	//SPIN
 	//ros::spin();
 	rclcpp::spin(node);
+
+	return 0;
 }
 
 

@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(spider_maestro_controller)
-
-if(NOT WIN32)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
-endif()
+#-Wc++11-narrowing -Wall -Wextra -Wdeprecated-declarations 
+#if(NOT WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-narrowing -Wall -Wdeprecated-declarations")
+#  set(CEF_C_COMPILER_FLAGS  -Wno-narrowing)
+#endif()
 
 #anita
 set(ROS_BUILD_TYPE Debug)

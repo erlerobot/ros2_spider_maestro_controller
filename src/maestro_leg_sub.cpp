@@ -30,13 +30,13 @@ int main(int argc, char **argv)
 	unsigned int baudRate = 9600;
 	maestro = Polstro::SerialInterface::createSerialInterface(portName, baudRate);
 	
-	//INITIALIZATION
+	//INITIALIZATION 
 	//ros::init(argc, argv, "maestro_leg_sub");
-	rclcpp::init(argc, argv, "maestro_leg_sub");
+	rclcpp::init(argc, argv);
 
 	//CREATE NODE
 	//ros::NodeHandle node; 
-	auto node;
+	auto node = rclcpp::Node::make_shared("maestro_leg_sub");
 	
 	//SUBSCRIBE
 	//ros::Subscriber sub = node.subscribe("leg_states", 1, chatterLegState);
